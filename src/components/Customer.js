@@ -1,34 +1,19 @@
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+
 function Customer(props) {
   return (
     <>
-      <CustomerProfile id={props.id} image={props.image} name={props.name} />
-      <CustomerInfo
-        name={props.name}
-        birthday={props.birthday}
-        gender={props.gender}
-        job={props.job}
-      />
-    </>
-  );
-}
-
-function CustomerProfile(props) {
-  return (
-    <>
-      <img src={props.image} alt="이미지" />
-      <h2>
-        {props.name}({props.id})
-      </h2>
-    </>
-  );
-}
-
-function CustomerInfo(props) {
-  return (
-    <>
-      <p>{props.birthday}</p>
-      <p>{props.gender}</p>
-      <p>{props.job}</p>
+      <TableRow>
+        <TableCell>{props.id}</TableCell>
+        <TableCell>
+          <img src={props.image} alt="이미지" />
+        </TableCell>
+        <TableCell>{props.name}</TableCell>
+        <TableCell>{props.birthday}</TableCell>
+        <TableCell>{props.gender}</TableCell>
+        <TableCell>{props.job}</TableCell>
+      </TableRow>
     </>
   );
 }
