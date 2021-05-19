@@ -8,6 +8,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { useState, useEffect } from 'react';
+//import { response } from 'express';
 
 const useStyles = makeStyles({
   root: {
@@ -16,39 +19,27 @@ const useStyles = makeStyles({
   table: {
     minWidth: 1080,
   },
+  progressCell: {
+    textAlign: 'center',
+  },
 });
 
-const customers = [
-  {
-    id: 1,
-    image: 'https://placeimg.com/64/64/1',
-    name: '홍길동',
-    birthday: '901212',
-    gender: '남자',
-    job: '도적',
-  },
-  {
-    id: 2,
-    image: 'https://placeimg.com/64/64/2',
-    name: '서기현',
-    birthday: '950113',
-    gender: '남자',
-    job: '대학생',
-  },
-  {
-    id: 3,
-    image: 'https://placeimg.com/64/64/3',
-    name: '박은비',
-    birthday: '911121',
-    gender: '여자',
-    job: '이쁜애',
-  },
-];
+async function getList() {
+  const response = await fetch('http://localhost:5000/api/customers');
+  const body = await response.json();
+  return body;
+}
 
 function App() {
   const classes = useStyles();
 
-  console.log(1234);
+  const [customers, setCustomers] = useState('');
+  //const [completed, setCompleted] = useState(0);
+
+  useEffect(() => {
+    getList().then((data) => setCustomers(data));
+    getList().catch((err) => console.log(err));
+  }, []);
 
   return (
     <TableContainer component={Paper} className={classes.root}>
@@ -64,19 +55,27 @@ function App() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {customers.map((c) => {
-            return (
-              <Customer
-                key={c.id}
-                id={c.id}
-                image={c.image}
-                name={c.name}
-                birthday={c.birthday}
-                gender={c.gender}
-                job={c.job}
-              />
-            );
-          })}
+          {customers ? (
+            customers.map((c) => {
+              return (
+                <Customer
+                  key={c.id}
+                  id={c.id}
+                  image={c.image}
+                  name={c.name}
+                  birthday={c.birthday}
+                  gender={c.gender}
+                  job={c.job}
+                />
+              );
+            })
+          ) : (
+            <TableRow>
+              <TableCell colSpan="6" className={classes.progressCell}>
+                <CircularProgress />
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
